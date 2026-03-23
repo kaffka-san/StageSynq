@@ -1,0 +1,50 @@
+"common.cancel" = "Cancel";
+"common.save" = "Save";
+"common.delete" = "Delete";
+"common.rename" = "Rename";
+"common.edit" = "Edit";
+"common.error.saveFailed" = "Failed to save changes.";
+
+"playlist.list.title" = "Playlists";
+"playlist.list.create" = "Create";
+"playlist.list.empty.title" = "No Playlists";
+"playlist.list.empty.message" = "Create your first playlist to start tracking songs.";
+"playlist.list.songsCountFormat" = "%d songs";
+"playlist.create.title" = "Create Playlist";
+"playlist.create.message" = "Enter a playlist name.";
+"playlist.rename.title" = "Rename Playlist";
+"playlist.rename.message" = "Enter a new playlist name.";
+"playlist.name.placeholder" = "Playlist name";
+"playlist.validation.nameRequired" = "Playlist name is required.";
+
+"playlist.detail.fallbackTitle" = "Playlist";
+"playlist.detail.songs.title" = "Songs";
+"playlist.detail.empty.title" = "No Songs";
+"playlist.detail.empty.message" = "Add songs to start using the timer.";
+
+"song.add.title" = "Add Song";
+"song.validation.nameRequired" = "Song name is required.";
+"song.validation.invalidMinutes" = "Minutes must be zero or more.";
+"song.validation.invalidSeconds" = "Seconds must be between 0 and 59.";
+"song.validation.durationRequired" = "Duration must be greater than zero.";
+
+"songEditor.title.add" = "Add Song";
+"songEditor.title.edit" = "Edit Song";
+"songEditor.section.basic" = "Basic";
+"songEditor.section.duration" = "Duration";
+"songEditor.name.placeholder" = "Song name";
+"songEditor.minutes.placeholder" = "Minutes";
+"songEditor.seconds.placeholder" = "Seconds";
+
+"timer.title" = "Song Timer";
+"timer.noSelection" = "No song selected";
+"timer.originalDuration" = "Original";
+"timer.originalDuration.empty" = "--:--";
+"timer.action.play" = "Play";
+"timer.action.pause" = "Pause";
+"timer.action.reset" = "Reset";
+"timer.state.idle" = "Idle";
+"timer.state.ready" = "Ready";
+"timer.state.running" = "Running";
+"timer.state.paused" = "Paused";
+"timer.state.finished" = "Finished";

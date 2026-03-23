@@ -1,0 +1,50 @@
+"common.cancel" = "Zrusit";
+"common.save" = "Ulozit";
+"common.delete" = "Smazat";
+"common.rename" = "Prejmenovat";
+"common.edit" = "Upravit";
+"common.error.saveFailed" = "Zmeny se nepodarilo ulozit.";
+
+"playlist.list.title" = "Playlisty";
+"playlist.list.create" = "Vytvorit";
+"playlist.list.empty.title" = "Zadne playlisty";
+"playlist.list.empty.message" = "Vytvorte prvni playlist a zacnete sledovat skladby.";
+"playlist.list.songsCountFormat" = "%d skladeb";
+"playlist.create.title" = "Vytvorit playlist";
+"playlist.create.message" = "Zadejte nazev playlistu.";
+"playlist.rename.title" = "Prejmenovat playlist";
+"playlist.rename.message" = "Zadejte novy nazev playlistu.";
+"playlist.name.placeholder" = "Nazev playlistu";
+"playlist.validation.nameRequired" = "Nazev playlistu je povinny.";
+
+"playlist.detail.fallbackTitle" = "Playlist";
+"playlist.detail.songs.title" = "Skladby";
+"playlist.detail.empty.title" = "Zadne skladby";
+"playlist.detail.empty.message" = "Pridanim skladeb spustite timer.";
+
+"song.add.title" = "Pridat skladbu";
+"song.validation.nameRequired" = "Nazev skladby je povinny.";
+"song.validation.invalidMinutes" = "Minuty musi byt 0 nebo vice.";
+"song.validation.invalidSeconds" = "Sekundy musi byt v rozsahu 0 az 59.";
+"song.validation.durationRequired" = "Delka musi byt vetsi nez nula.";
+
+"songEditor.title.add" = "Pridat skladbu";
+"songEditor.title.edit" = "Upravit skladbu";
+"songEditor.section.basic" = "Zaklad";
+"songEditor.section.duration" = "Delka";
+"songEditor.name.placeholder" = "Nazev skladby";
+"songEditor.minutes.placeholder" = "Minuty";
+"songEditor.seconds.placeholder" = "Sekundy";
+
+"timer.title" = "Timer skladby";
+"timer.noSelection" = "Neni vybrana skladba";
+"timer.originalDuration" = "Puvodni delka";
+"timer.originalDuration.empty" = "--:--";
+"timer.action.play" = "Spustit";
+"timer.action.pause" = "Pauza";
+"timer.action.reset" = "Reset";
+"timer.state.idle" = "Neaktivni";
+"timer.state.ready" = "Pripraveno";
+"timer.state.running" = "Bezi";
+"timer.state.paused" = "Pozastaveno";
+"timer.state.finished" = "Dokonceno";
