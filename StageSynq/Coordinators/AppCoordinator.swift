@@ -35,6 +35,7 @@ final class AppCoordinator: PlaylistListFlow {
                 viewModel: makePlaylistDetailViewModel(playlistID: playlistID),
                 timerViewModel: timerViewModel
             )
+            .id(playlistID)
         }
     }
 }

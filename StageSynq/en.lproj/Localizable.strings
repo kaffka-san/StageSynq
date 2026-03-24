@@ -18,9 +18,15 @@
 "playlist.validation.nameRequired" = "Playlist name is required.";
 
 "playlist.detail.fallbackTitle" = "Playlist";
-"playlist.detail.songs.title" = "Songs";
+"playlist.detail.songs.title" = "Setlist";
 "playlist.detail.empty.title" = "No Songs";
 "playlist.detail.empty.message" = "Add songs to start using the timer.";
+"playlist.song.row.accessibility" = "%d. %@, %@";
+"playlist.detail.resetState" = "Reset state";
+"playlist.detail.flashlight" = "Light";
+"playlist.detail.flashlight.accessibility" = "Toggle flashlight";
+"playlist.detail.notes.toggle.accessibility" = "Show or hide song notes on the setlist";
+"playlist.song.playing.accessibility" = "Now playing";
 
 "song.add.title" = "Add Song";
 "song.validation.nameRequired" = "Song name is required.";
@@ -32,17 +38,23 @@
 "songEditor.title.edit" = "Edit Song";
 "songEditor.section.basic" = "Basic";
 "songEditor.section.duration" = "Duration";
+"songEditor.section.color" = "Card color";
+"songEditor.section.notes" = "Notes";
+"songEditor.notes.placeholder" = "Cue, lyrics, or reminders…";
+"songEditor.color.accessibility" = "Color %d";
 "songEditor.name.placeholder" = "Song name";
 "songEditor.minutes.placeholder" = "Minutes";
 "songEditor.seconds.placeholder" = "Seconds";
 
 "timer.title" = "Song Timer";
 "timer.noSelection" = "No song selected";
+"timer.songNumberFormat" = "#%d";
 "timer.originalDuration" = "Original";
 "timer.originalDuration.empty" = "--:--";
 "timer.action.play" = "Play";
 "timer.action.pause" = "Pause";
 "timer.action.reset" = "Reset";
+"timer.action.finishSong" = "Finish song";
 "timer.state.idle" = "Idle";
 "timer.state.ready" = "Ready";
 "timer.state.running" = "Running";

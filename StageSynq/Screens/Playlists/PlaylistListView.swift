@@ -20,12 +20,14 @@ struct PlaylistListView: View {
                         playlistRow(playlist: playlist, color: StageSyncStyle.cardPalette[index % StageSyncStyle.cardPalette.count])
                             .listRowBackground(Color.clear)
                             .listRowInsets(EdgeInsets(top: 6, leading: 0, bottom: 6, trailing: 0))
+                            .listRowSeparator(.hidden)
                     }
                     .onDelete(perform: viewModel.deletePlaylist)
                     .onMove(perform: viewModel.reorderPlaylists)
                 }
                 .scrollContentBackground(.hidden)
                 .listStyle(.plain)
+                .scrollIndicators(.hidden)
                 .padding(.horizontal)
                 .padding(.top, 8)
             }

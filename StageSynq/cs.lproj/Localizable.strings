@@ -18,9 +18,15 @@
 "playlist.validation.nameRequired" = "Nazev playlistu je povinny.";
 
 "playlist.detail.fallbackTitle" = "Playlist";
-"playlist.detail.songs.title" = "Skladby";
+"playlist.detail.songs.title" = "Poradi skladeb";
 "playlist.detail.empty.title" = "Zadne skladby";
 "playlist.detail.empty.message" = "Pridanim skladeb spustite timer.";
+"playlist.song.row.accessibility" = "%d. %@, %@";
+"playlist.detail.resetState" = "Reset stavu";
+"playlist.detail.flashlight" = "Svetlo";
+"playlist.detail.flashlight.accessibility" = "Zapnout nebo vypnout baterku";
+"playlist.detail.notes.toggle.accessibility" = "Zobrazit nebo skryt poznamky ke skladbam v seznamu";
+"playlist.song.playing.accessibility" = "Prave hraje";
 
 "song.add.title" = "Pridat skladbu";
 "song.validation.nameRequired" = "Nazev skladby je povinny.";
@@ -32,17 +38,23 @@
 "songEditor.title.edit" = "Upravit skladbu";
 "songEditor.section.basic" = "Zaklad";
 "songEditor.section.duration" = "Delka";
+"songEditor.section.color" = "Barva karty";
+"songEditor.section.notes" = "Poznamky";
+"songEditor.notes.placeholder" = "Text, pripominky pro vystup…";
+"songEditor.color.accessibility" = "Barva %d";
 "songEditor.name.placeholder" = "Nazev skladby";
 "songEditor.minutes.placeholder" = "Minuty";
 "songEditor.seconds.placeholder" = "Sekundy";
 
 "timer.title" = "Timer skladby";
 "timer.noSelection" = "Neni vybrana skladba";
+"timer.songNumberFormat" = "#%d";
 "timer.originalDuration" = "Puvodni delka";
 "timer.originalDuration.empty" = "--:--";
 "timer.action.play" = "Spustit";
 "timer.action.pause" = "Pauza";
 "timer.action.reset" = "Reset";
+"timer.action.finishSong" = "Ukoncit skladbu";
 "timer.state.idle" = "Neaktivni";
 "timer.state.ready" = "Pripraveno";
 "timer.state.running" = "Bezi";

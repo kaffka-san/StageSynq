@@ -112,6 +112,13 @@ extension SongTimerViewModel {
         state = .ready
     }
 
+    func finishSong() {
+        guard selectedSong != nil else {
+            return
+        }
+        finishTimer()
+    }
+
     func appDidBecomeActive() {
         recalculateRemainingTime()
     }

@@ -10,6 +10,8 @@ final class SongEditorViewModel {
     var name: String
     var minutes: Int
     var seconds: Int
+    var cardColorIndex: Int
+    var notes: String
     var validationMessage: String?
 
     init(mode: SongEditorMode, song: Song? = nil) {
@@ -17,6 +19,8 @@ final class SongEditorViewModel {
         self.name = song?.name ?? ""
         self.minutes = song?.durationMinutes ?? 0
         self.seconds = song?.durationSeconds ?? 0
+        self.cardColorIndex = song?.cardColorIndex ?? 0
+        self.notes = song?.notes ?? ""
     }
 }
 

@@ -9,6 +9,8 @@ final class PlaylistDetailViewModel {
     let playlistID: UUID
     var selectedSongID: UUID?
     var validationMessage: String?
+    /// Songs at or before the last finished track in the current show (stays dimmed after finish until toolbar reset).
+    var completedSongIDs: Set<UUID> = []
 
     // MARK: - Private properties
 
@@ -37,12 +39,21 @@ extension PlaylistDetailViewModel {
     var songs: [Song] {
         playlist?.songs.sorted(by: { $0.order < $1.order }) ?? []
     }
+
+    /// 1-based position of the song currently driving the timer (or list selection), for the timer UI.
+    var currentTimerSongNumber: Int? {
+        let id = timerViewModel.selectedSong?.id ?? selectedSongID
+        guard let id, let idx = songs.firstIndex(where: { $0.id == id }) else {
+            return nil
+        }
+        return idx + 1
+    }
 }
 
 extension PlaylistDetailViewModel {
     // MARK: - Public methods
 
-    func addSong(name: String, minutes: Int, seconds: Int) -> Bool {
+    func addSong(name: String, minutes: Int, seconds: Int, cardColorIndex: Int? = nil, notes: String = "") -> Bool {
         var allPlaylists = loadPlaylists()
         guard let playlistIndex = allPlaylists.firstIndex(where: { $0.id == playlistID }) else {
             return false
@@ -54,18 +65,29 @@ extension PlaylistDetailViewModel {
         }
 
         let nextOrder = allPlaylists[playlistIndex].songs.count
+        let color = cardColorIndex.map { min(max(0, $0), 7) } ?? (nextOrder % 8)
+        let trimmedNotes = notes.trimmingCharacters(in: .whitespacesAndNewlines)
         let song = Song(
             name: trimmedName,
             durationMinutes: minutes,
             durationSeconds: seconds,
-            order: nextOrder
+            order: nextOrder,
+            cardColorIndex: color,
+            notes: trimmedNotes
         )
         allPlaylists[playlistIndex].songs.append(song)
         allPlaylists[playlistIndex].updatedAt = .now
         return save(allPlaylists)
     }
 
-    func updateSong(songID: UUID, name: String, minutes: Int, seconds: Int) -> Bool {
+    func updateSong(
+        songID: UUID,
+        name: String,
+        minutes: Int,
+        seconds: Int,
+        cardColorIndex: Int,
+        notes: String
+    ) -> Bool {
         var allPlaylists = loadPlaylists()
         guard
             let playlistIndex = allPlaylists.firstIndex(where: { $0.id == playlistID }),
@@ -82,10 +104,12 @@ extension PlaylistDetailViewModel {
         allPlaylists[playlistIndex].songs[songIndex].name = trimmedName
         allPlaylists[playlistIndex].songs[songIndex].durationMinutes = minutes
         allPlaylists[playlistIndex].songs[songIndex].durationSeconds = seconds
+        allPlaylists[playlistIndex].songs[songIndex].cardColorIndex = min(max(0, cardColorIndex), 7)
+        allPlaylists[playlistIndex].songs[songIndex].notes = notes.trimmingCharacters(in: .whitespacesAndNewlines)
         allPlaylists[playlistIndex].updatedAt = .now
 
         let updatedSong = allPlaylists[playlistIndex].songs[songIndex]
-        if selectedSongID == updatedSong.id {
+        if timerViewModel.selectedSong?.id == updatedSong.id {
             timerViewModel.selectSong(updatedSong)
         }
 
@@ -109,6 +133,8 @@ extension PlaylistDetailViewModel {
 
         if let selectedSongID, removedIDs.contains(selectedSongID) {
             self.selectedSongID = nil
+        }
+        if let activeID = timerViewModel.selectedSong?.id, removedIDs.contains(activeID) {
             timerViewModel.reset()
             timerViewModel.selectedSong = nil
             timerViewModel.state = .idle
@@ -135,9 +161,82 @@ extension PlaylistDetailViewModel {
         _ = save(allPlaylists)
     }
 
-    func selectSong(_ song: Song) {
+    func onSongRowTapped(_ song: Song) {
         selectedSongID = song.id
-        timerViewModel.selectSong(song)
+        switch timerViewModel.state {
+        case .running, .paused:
+            return
+        case .idle, .ready, .finished:
+            timerViewModel.selectSong(song)
+        }
+    }
+
+    /// Call when the timer reaches `.finished` (natural end or “Finish song”) so played rows stay dimmed.
+    func registerSongsCompletedThrough(songID: UUID) {
+        guard let idx = songs.firstIndex(where: { $0.id == songID }) else {
+            return
+        }
+        for i in 0...idx {
+            completedSongIDs.insert(songs[i].id)
+        }
+    }
+
+    func clearCompletedSongsForNewShow() {
+        completedSongIDs = []
+    }
+
+    /// Clears dimmed “played” state for the song and every song below it; used when starting playback (Play) from a completed row.
+    func clearCompletedFromSongThroughEnd(songID: UUID) {
+        guard let idx = songs.firstIndex(where: { $0.id == songID }) else {
+            return
+        }
+        for i in idx..<songs.count {
+            completedSongIDs.remove(songs[i].id)
+        }
+    }
+
+    /// After a song ends, selects the next track (ready, not playing). No-op if there is no next song.
+    func advanceToNextSongAfterFinishIfNeeded(finishedSongID: UUID) {
+        guard let idx = songs.firstIndex(where: { $0.id == finishedSongID }) else {
+            return
+        }
+        let nextIndex = idx + 1
+        guard nextIndex < songs.count else {
+            return
+        }
+        let next = songs[nextIndex]
+        selectedSongID = next.id
+        timerViewModel.selectSong(next)
+    }
+
+    func primaryTimerAction() {
+        let highlight = songForID(selectedSongID)
+        switch timerViewModel.state {
+        case .running:
+            timerViewModel.pause()
+        case .paused:
+            timerViewModel.startOrResume()
+        case .idle, .ready, .finished:
+            guard let song = highlight ?? timerViewModel.selectedSong else {
+                return
+            }
+            if completedSongIDs.contains(song.id) {
+                clearCompletedFromSongThroughEnd(songID: song.id)
+            }
+            if timerViewModel.selectedSong?.id != song.id {
+                timerViewModel.selectSong(song)
+            } else if timerViewModel.state == .finished {
+                timerViewModel.reset()
+            }
+            timerViewModel.startOrResume()
+        }
+    }
+
+    private func songForID(_ id: UUID?) -> Song? {
+        guard let id else {
+            return nil
+        }
+        return songs.first(where: { $0.id == id })
     }
 }
 

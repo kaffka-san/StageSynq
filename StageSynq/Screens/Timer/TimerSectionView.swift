@@ -2,10 +2,22 @@ import SwiftUI
 
 struct TimerSectionView: View {
     @Bindable var viewModel: SongTimerViewModel
+    var songNumber: Int? = nil
+    var onPrimaryAction: (() -> Void)? = nil
+    var isPlayDisabled: Bool? = nil
+    var isFinishDisabled: Bool? = nil
 
     var body: some View {
         VStack(spacing: 10) {
-            HStack(alignment: .firstTextBaseline) {
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                if let songNumber {
+                    Text(
+                        String(format: "timer.songNumberFormat".localized, songNumber)
+                    )
+                    .font(.subheadline.weight(.bold).monospacedDigit())
+                    .foregroundStyle(StageSyncStyle.accent)
+                }
+
                 Text(viewModel.selectedSongName)
                     .font(.headline.weight(.semibold))
                     .foregroundStyle(.white)
@@ -44,17 +56,17 @@ struct TimerSectionView: View {
                 .buttonStyle(.borderedProminent)
                 .tint(StageSyncStyle.accent)
                 .foregroundStyle(.black)
-                .disabled(viewModel.state == .idle)
+                .disabled(playDisabled)
 
-                Button("timer.action.reset".localized) {
-                    viewModel.reset()
+                Button("timer.action.finishSong".localized) {
+                    viewModel.finishSong()
                 }
                 .buttonStyle(.bordered)
                 .font(.headline.weight(.semibold))
                 .tint(.white)
                 .frame(maxWidth: .infinity)
                 .frame(minHeight: 52)
-                .disabled(viewModel.state == .idle)
+                .disabled(finishDisabled)
             }
         }
         .padding(20)
@@ -66,6 +78,14 @@ struct TimerSectionView: View {
 }
 
 private extension TimerSectionView {
+    var playDisabled: Bool {
+        isPlayDisabled ?? (viewModel.state == .idle)
+    }
+
+    var finishDisabled: Bool {
+        isFinishDisabled ?? (viewModel.selectedSong == nil || viewModel.state == .finished)
+    }
+
     var primaryButtonTitle: String {
         switch viewModel.state {
         case .running:
@@ -89,7 +109,9 @@ private extension TimerSectionView {
     }
 
     func primaryAction() {
-        if viewModel.state == .running {
+        if let onPrimaryAction {
+            onPrimaryAction()
+        } else if viewModel.state == .running {
             viewModel.pause()
         } else {
             viewModel.startOrResume()
