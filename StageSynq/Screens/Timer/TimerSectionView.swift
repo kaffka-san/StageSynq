@@ -8,6 +8,8 @@ struct TimerSectionView: View {
     @AppStorage(AppSettings.timerAdjustStepKey) private var adjustStepSeconds = AppSettings.defaultTimerAdjustStep
 
     @Bindable var viewModel: SongTimerViewModel
+    /// Inset for home indicator; background still extends under safe area.
+    var bottomSafeInset: CGFloat = 0
     var songNumber: Int? = nil
     var onPrimaryAction: (() -> Void)? = nil
     var isPlayDisabled: Bool? = nil
@@ -113,10 +115,58 @@ struct TimerSectionView: View {
                 .disabled(finishDisabled)
             }
         }
-        .padding(20)
-        .background(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(.ultraThinMaterial)
+        .padding(.horizontal, 20)
+        .padding(.top, 20)
+        .padding(.bottom, bottomSafeInset)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+        .background {
+            ZStack {
+                Self.liquidGlassDockedShape
+                    .fill(Color.black.opacity(0.72))
+                Self.liquidGlassDockedShape
+                    .fill(.ultraThinMaterial)
+                    .opacity(0.78)
+                Self.liquidGlassDockedShape
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color.white.opacity(0.14),
+                                Color.white.opacity(0.03),
+                                Color.clear
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .blendMode(.plusLighter)
+                Self.liquidGlassDockedShape
+                    .strokeBorder(
+                        LinearGradient(
+                            colors: [
+                                Color.white.opacity(0.45),
+                                Color.white.opacity(0.1),
+                                Color.white.opacity(0.16)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: 1
+                    )
+            }
+            .opacity(0.94)
+        }
+    }
+
+    /// Top-rounded bar, square bottom — flush with screen bottom.
+    private static var liquidGlassDockedShape: UnevenRoundedRectangle {
+        UnevenRoundedRectangle(
+            cornerRadii: RectangleCornerRadii(
+                topLeading: 28,
+                bottomLeading: 0,
+                bottomTrailing: 0,
+                topTrailing: 28
+            ),
+            style: .continuous
         )
     }
 }
@@ -199,13 +249,13 @@ private extension TimerSectionView {
 #Preview("Ready") {
     let timerVM = SongTimerViewModel()
     timerVM.selectSong(Song(name: "Intro", durationMinutes: 2, durationSeconds: 30, order: 0))
-    return TimerSectionView(viewModel: timerVM)
-        .padding()
-        .background(.black)
+    return TimerSectionView(viewModel: timerVM, bottomSafeInset: 34)
+        .frame(height: 320)
+        .background(StageSyncStyle.background)
 }
 
 #Preview("Idle") {
-    TimerSectionView(viewModel: SongTimerViewModel())
-        .padding()
-        .background(.black)
+    TimerSectionView(viewModel: SongTimerViewModel(), bottomSafeInset: 34)
+        .frame(height: 320)
+        .background(StageSyncStyle.background)
 }

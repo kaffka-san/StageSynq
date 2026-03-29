@@ -19,20 +19,20 @@ struct PlaylistDetailView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     songsListSection
                 }
-                .padding(.horizontal, 16)
+                .padding(.horizontal, 12)
                 .padding(.bottom, timerBottomInset)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
 
                 TimerSectionView(
                     viewModel: timerViewModel,
+                    bottomSafeInset: safeBottom,
                     songNumber: viewModel.currentTimerSongNumber,
                     onPrimaryAction: { viewModel.primaryTimerAction() },
                     isPlayDisabled: playButtonDisabled,
                     isFinishDisabled: finishButtonDisabled
                 )
-                .frame(height: timerHeight)
+                .frame(height: timerHeight + safeBottom)
                 .frame(maxWidth: .infinity)
-                .padding(.bottom, safeBottom)
             }
             .ignoresSafeArea(edges: .bottom)
         }
@@ -131,18 +131,6 @@ struct PlaylistDetailView: View {
     }
 }
 
-private enum PlayingIconStyle {
-    static let backgroundFill = Color(red: 0.06, green: 0.06, blue: 0.07)
-    static let iconGradient = LinearGradient(
-        colors: [
-            Color(white: 0.62),
-            Color(white: 0.96)
-        ],
-        startPoint: .topLeading,
-        endPoint: .bottomTrailing
-    )
-}
-
 private extension PlaylistDetailView {
     /// Fill while the timer is running on this row; outline uses the song card color.
     static let playingRowBackground = Color.white
@@ -177,13 +165,16 @@ private extension PlaylistDetailView {
                 List {
                     ForEach(Array(viewModel.songs.enumerated()), id: \.element.id) { index, song in
                         songRow(index: index, song: song, showNotes: showSongNotes)
+                            .compositingGroup()
+                            .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
                             .listRowBackground(Color.clear)
-                            .listRowInsets(EdgeInsets(top: 6, leading: 0, bottom: 6, trailing: 0))
+                            .listRowInsets(EdgeInsets(top: 6, leading: 12, bottom: 6, trailing: 12))
                             .listRowSeparator(.hidden)
                     }
                     .onMove(perform: viewModel.reorderSongs)
                 }
                 .scrollContentBackground(.hidden)
+                .background(StageSyncStyle.background)
                 .listStyle(.plain)
                 .scrollIndicators(.hidden)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -235,16 +226,8 @@ private extension PlaylistDetailView {
                 if isPlayingThisSong {
                     Image(systemName: "waveform")
                         .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(color)
+                        .foregroundStyle(Color.green)
                         .symbolEffect(.variableColor.iterative, options: .repeating, isActive: timerViewModel.state == .running)
-                        .padding(.horizontal, 2)
-                        .padding(.vertical, 4)
-                        .background(
-                            Capsule()
-                                .fill(PlayingIconStyle.backgroundFill)
-                                .frame(width: 40, height: 20)
-                                .opacity(0.8)
-                        )
                         .scaleEffect(2)
                         .frame(width: 80, height: 40)
                         .accessibilityLabel("playlist.song.playing.accessibility".localized)
@@ -263,7 +246,7 @@ private extension PlaylistDetailView {
         .overlay {
             if isActivelyPlayingThisSong {
                 RoundedRectangle(cornerRadius: 18, style: .continuous)
-                    .strokeBorder(color, lineWidth: 7.5)
+                    .strokeBorder(color, lineWidth: 5)
             }
         }
         .contentShape(Rectangle())
