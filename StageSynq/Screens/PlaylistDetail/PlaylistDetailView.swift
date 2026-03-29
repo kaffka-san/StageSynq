@@ -20,6 +20,7 @@ struct PlaylistDetailView: View {
                     songsListSection
                 }
                 .padding(.horizontal, 16)
+                .padding(.bottom, timerBottomInset)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
 
                 TimerSectionView(
@@ -31,6 +32,7 @@ struct PlaylistDetailView: View {
                 )
                 .frame(height: timerHeight)
                 .frame(maxWidth: .infinity)
+                .padding(.bottom, safeBottom)
             }
             .ignoresSafeArea(edges: .bottom)
         }
@@ -142,6 +144,9 @@ private enum PlayingIconStyle {
 }
 
 private extension PlaylistDetailView {
+    /// Fill while the timer is running on this row; outline uses the song card color.
+    static let playingRowBackground = Color.white
+
     var playButtonDisabled: Bool {
         switch timerViewModel.state {
         case .running, .paused, .ready, .finished:
@@ -199,6 +204,8 @@ private extension PlaylistDetailView {
         let isCompleted = viewModel.completedSongIDs.contains(song.id)
         let isDimmed = isCompleted || isAbovePlaying
         let isPlayingThisSong = playingSongID == song.id
+        let isActivelyPlayingThisSong = timerViewModel.selectedSong?.id == song.id
+            && timerViewModel.state == .running
 
         HStack(alignment: .center, spacing: 12) {
           
@@ -209,7 +216,7 @@ private extension PlaylistDetailView {
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(song.name)
-                    .font(.headline.weight(.semibold))
+                    .font(.title2.weight(.semibold))
                     .foregroundStyle(.black.opacity(isDimmed ? 0.45 : 1))
                 Text(song.formattedDuration)
                     .font(.subheadline.weight(.medium))
@@ -238,6 +245,8 @@ private extension PlaylistDetailView {
                                 .frame(width: 40, height: 20)
                                 .opacity(0.8)
                         )
+                        .scaleEffect(2)
+                        .frame(width: 80, height: 40)
                         .accessibilityLabel("playlist.song.playing.accessibility".localized)
                 }
             }
@@ -248,9 +257,15 @@ private extension PlaylistDetailView {
         .padding(14)
         .background(
             RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .fill(color)
-                .opacity(isDimmed ? 0.55 : 1)
+                .fill(isActivelyPlayingThisSong ? Self.playingRowBackground : color)
+                .opacity(isActivelyPlayingThisSong ? 1 : (isDimmed ? 0.55 : 1))
         )
+        .overlay {
+            if isActivelyPlayingThisSong {
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .strokeBorder(color, lineWidth: 7.5)
+            }
+        }
         .contentShape(Rectangle())
         .accessibilityLabel(
             String(format: "playlist.song.row.accessibility".localized, index + 1, song.name, song.formattedDuration)

@@ -5,21 +5,36 @@ struct SongEditorView: View {
     @Bindable var viewModel: SongEditorViewModel
     let onSave: (String, Int, Int, Int, String) -> Bool
 
-    @State private var minutesInput: String = "0"
-    @State private var secondsInput: String = "0"
-
     var body: some View {
         NavigationStack {
             Form {
-                Section("songEditor.section.basic".localized) {
+                Section("songEditor.section.songTitle".localized) {
                     TextField("songEditor.name.placeholder".localized, text: $viewModel.name)
                 }
 
                 Section("songEditor.section.duration".localized) {
-                    TextField("songEditor.minutes.placeholder".localized, text: $minutesInput)
-                        .keyboardType(.numberPad)
-                    TextField("songEditor.seconds.placeholder".localized, text: $secondsInput)
-                        .keyboardType(.numberPad)
+                    HStack(spacing: 0) {
+                        Picker("songEditor.minutes.label".localized, selection: $viewModel.minutes) {
+                            ForEach(0..<180, id: \.self) { minutes in
+                                Text(String(format: "songEditor.minutes.pickerFormat".localized, minutes))
+                                    .tag(minutes)
+                            }
+                        }
+                        .pickerStyle(.wheel)
+                        .frame(maxWidth: .infinity)
+                        .clipped()
+
+                        Picker("songEditor.seconds.label".localized, selection: $viewModel.seconds) {
+                            ForEach(0..<60, id: \.self) { seconds in
+                                Text(String(format: "songEditor.seconds.pickerFormat".localized, seconds))
+                                    .tag(seconds)
+                            }
+                        }
+                        .pickerStyle(.wheel)
+                        .frame(maxWidth: .infinity)
+                        .clipped()
+                    }
+                    .frame(height: 140)
                 }
 
                 Section("songEditor.section.notes".localized) {
@@ -76,8 +91,6 @@ struct SongEditorView: View {
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("common.save".localized) {
-                        viewModel.updateMinutes(from: minutesInput)
-                        viewModel.updateSeconds(from: secondsInput)
                         if onSave(viewModel.name, viewModel.minutes, viewModel.seconds, viewModel.cardColorIndex, viewModel.notes) {
                             dismiss()
                         }
@@ -85,10 +98,6 @@ struct SongEditorView: View {
                 }
             }
             .tint(StageSyncStyle.accent)
-            .onAppear {
-                minutesInput = String(viewModel.minutes)
-                secondsInput = String(viewModel.seconds)
-            }
         }
     }
 }

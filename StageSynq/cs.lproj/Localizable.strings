@@ -1,9 +1,24 @@
 "common.cancel" = "Zrusit";
 "common.save" = "Ulozit";
+"common.done" = "Hotovo";
 "common.delete" = "Smazat";
 "common.rename" = "Prejmenovat";
 "common.edit" = "Upravit";
 "common.error.saveFailed" = "Zmeny se nepodarilo ulozit.";
+
+"settings.title" = "Nastaveni";
+"settings.fontSize.title" = "Velikost textu";
+"settings.fontSize.footer" = "Plati jen pro tuto aplikaci.";
+"settings.fontSize.smaller" = "Mensi";
+"settings.fontSize.standard" = "Vychozi";
+"settings.fontSize.larger" = "Vetsi";
+"settings.fontSize.extraLarge" = "Velmi velke";
+"settings.timerUrgentSeconds.title" = "Varovani odpoctu";
+"settings.timerUrgentSeconds.value" = "%d s pred koncem";
+"settings.timerUrgentSeconds.footer" = "Cisla timeru zcervenaji, kdyz zbyva nejvyse tento cas.";
+"settings.timerAdjustStep.title" = "Krok preskoku timeru";
+"settings.timerAdjustStep.seconds" = "%d s";
+"settings.timerAdjustStep.footer" = "Kolik sekund pridaji nebo odeberou tlacitka preskoku na timeru.";
 
 "playlist.list.title" = "Playlisty";
 "playlist.list.create" = "Vytvorit";
@@ -36,8 +51,12 @@
 
 "songEditor.title.add" = "Pridat skladbu";
 "songEditor.title.edit" = "Upravit skladbu";
-"songEditor.section.basic" = "Zaklad";
+"songEditor.section.songTitle" = "Nazev skladby";
 "songEditor.section.duration" = "Delka";
+"songEditor.minutes.label" = "Minuty";
+"songEditor.seconds.label" = "Sekundy";
+"songEditor.minutes.pickerFormat" = "%d min";
+"songEditor.seconds.pickerFormat" = "%d s";
 "songEditor.section.color" = "Barva karty";
 "songEditor.section.notes" = "Poznamky";
 "songEditor.notes.placeholder" = "Text, pripominky pro vystup…";
@@ -60,5 +79,5 @@
 "timer.state.running" = "Bezi";
 "timer.state.paused" = "Pozastaveno";
 "timer.state.finished" = "Dokonceno";
-"timer.adjust.minus5.accessibility" = "Odečíst pět sekund";
-"timer.adjust.plus5.accessibility" = "Přidat pět sekund";
+"timer.adjust.minus.accessibility" = "Odečíst %d sekund";
+"timer.adjust.plus.accessibility" = "Přidat %d sekund";

@@ -4,6 +4,9 @@ struct TimerSectionView: View {
     private static let countdownFontSize: CGFloat = 54 * 1.4
     private static let actionButtonMinHeight: CGFloat = 32
 
+    @AppStorage(AppSettings.timerUrgentSecondsKey) private var urgentThresholdSeconds = AppSettings.defaultTimerUrgentSeconds
+    @AppStorage(AppSettings.timerAdjustStepKey) private var adjustStepSeconds = AppSettings.defaultTimerAdjustStep
+
     @Bindable var viewModel: SongTimerViewModel
     var songNumber: Int? = nil
     var onPrimaryAction: (() -> Void)? = nil
@@ -11,7 +14,7 @@ struct TimerSectionView: View {
     var isFinishDisabled: Bool? = nil
 
     var body: some View {
-        VStack(spacing: 14) {
+        VStack(spacing: 10) {
             HStack(alignment: .firstTextBaseline, spacing: 10) {
                 HStack(alignment: .firstTextBaseline, spacing: 10) {
                     if let songNumber {
@@ -38,17 +41,19 @@ struct TimerSectionView: View {
 
             HStack(alignment: .center, spacing: 10) {
                 Button {
-                    viewModel.adjustRemainingTime(bySeconds: -5)
+                    viewModel.adjustRemainingTime(bySeconds: -adjustStepSeconds)
                 } label: {
-                    Image(systemName: "gobackward.5")
+                    Image(systemName: TimerAdjustStepIcon.systemName(forward: false, seconds: adjustStepSeconds))
                         .font(.title3.weight(.semibold))
                         .frame(width: 32, height: 32)
                 }
                 .controlSize(.small)
                 .tint(.white.opacity(0.85))
                 .disabled(!canAdjustRemainingTime)
-                .accessibilityLabel("timer.adjust.minus5.accessibility".localized)
-               // Spacer()
+                .accessibilityLabel(
+                    String(format: "timer.adjust.minus.accessibility".localized, adjustStepSeconds)
+                )
+
                 Text(viewModel.remainingTimeLabel)
                     .font(.system(size: Self.countdownFontSize, weight: .bold, design: .rounded))
                     .monospacedDigit()
@@ -56,21 +61,21 @@ struct TimerSectionView: View {
                     .minimumScaleFactor(0.6)
                     .lineLimit(1)
                     .frame(maxWidth: .infinity)
-              //  Spacer()
 
                 Button {
-                    viewModel.adjustRemainingTime(bySeconds: 5)
+                    viewModel.adjustRemainingTime(bySeconds: adjustStepSeconds)
                 } label: {
-                    Image(systemName: "goforward.5")
+                    Image(systemName: TimerAdjustStepIcon.systemName(forward: true, seconds: adjustStepSeconds))
                         .font(.title3.weight(.semibold))
                         .frame(width: 32, height: 32)
                 }
                 .controlSize(.small)
                 .tint(.white.opacity(0.85))
                 .disabled(!canAdjustRemainingTime)
-                .accessibilityLabel("timer.adjust.plus5.accessibility".localized)
+                .accessibilityLabel(
+                    String(format: "timer.adjust.plus.accessibility".localized, adjustStepSeconds)
+                )
             }
-            .padding(.horizontal, 26)
 
             HStack {
                 Text("timer.originalDuration".localized)
@@ -82,7 +87,7 @@ struct TimerSectionView: View {
             }
             .font(.caption)
 
-            HStack(spacing: 24) {
+            HStack(spacing: 10) {
                 Button(action: primaryAction) {
                     Text(primaryButtonTitle.localized)
                         .font(.headline.weight(.semibold))
@@ -107,28 +112,16 @@ struct TimerSectionView: View {
                 .foregroundStyle(.black)
                 .disabled(finishDisabled)
             }
-            .padding(.bottom, 20)
         }
         .padding(20)
-        .background {
-            RoundedRectangle(cornerRadius: 28, style: .continuous)
+        .background(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
                 .fill(.ultraThinMaterial)
-                .environment(\.colorScheme, .dark)
-                .overlay {
-                    RoundedRectangle(cornerRadius: 28, style: .continuous)
-                        .fill(Color.black.opacity(0.75))
-                }
-                .overlay {
-                    RoundedRectangle(cornerRadius: 28, style: .continuous)
-                        .strokeBorder(Color.white.opacity(0.12), lineWidth: 1)
-                }
-        }
+        )
     }
 }
 
 private extension TimerSectionView {
-    private static let urgentRemainingSeconds = 30
-
     var playDisabled: Bool {
         isPlayDisabled ?? (viewModel.state == .idle)
     }
@@ -149,7 +142,7 @@ private extension TimerSectionView {
 
     var countdownForegroundStyle: Color {
         let remaining = viewModel.remainingSeconds
-        if remaining > 0, remaining <= Self.urgentRemainingSeconds {
+        if remaining > 0, remaining <= urgentThresholdSeconds {
             return .red
         }
         return .white

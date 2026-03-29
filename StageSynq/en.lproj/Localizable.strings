@@ -1,9 +1,24 @@
 "common.cancel" = "Cancel";
 "common.save" = "Save";
+"common.done" = "Done";
 "common.delete" = "Delete";
 "common.rename" = "Rename";
 "common.edit" = "Edit";
 "common.error.saveFailed" = "Failed to save changes.";
+
+"settings.title" = "Settings";
+"settings.fontSize.title" = "Text size";
+"settings.fontSize.footer" = "Applies to this app only.";
+"settings.fontSize.smaller" = "Smaller";
+"settings.fontSize.standard" = "Default";
+"settings.fontSize.larger" = "Larger";
+"settings.fontSize.extraLarge" = "Extra Large";
+"settings.timerUrgentSeconds.title" = "Countdown warning";
+"settings.timerUrgentSeconds.value" = "%d seconds before end";
+"settings.timerUrgentSeconds.footer" = "Timer digits turn red when remaining time is at or below this value.";
+"settings.timerAdjustStep.title" = "Timer skip step";
+"settings.timerAdjustStep.seconds" = "%d sec";
+"settings.timerAdjustStep.footer" = "Seconds added or removed when using the skip buttons on the timer.";
 
 "playlist.list.title" = "Playlists";
 "playlist.list.create" = "Create";
@@ -36,8 +51,12 @@
 
 "songEditor.title.add" = "Add Song";
 "songEditor.title.edit" = "Edit Song";
-"songEditor.section.basic" = "Basic";
+"songEditor.section.songTitle" = "Song title";
 "songEditor.section.duration" = "Duration";
+"songEditor.minutes.label" = "Minutes";
+"songEditor.seconds.label" = "Seconds";
+"songEditor.minutes.pickerFormat" = "%d min";
+"songEditor.seconds.pickerFormat" = "%d sec";
 "songEditor.section.color" = "Card color";
 "songEditor.section.notes" = "Notes";
 "songEditor.notes.placeholder" = "Cue, lyrics, or reminders…";
@@ -60,5 +79,5 @@
 "timer.state.running" = "Running";
 "timer.state.paused" = "Paused";
 "timer.state.finished" = "Finished";
-"timer.adjust.minus5.accessibility" = "Subtract five seconds";
-"timer.adjust.plus5.accessibility" = "Add five seconds";
+"timer.adjust.minus.accessibility" = "Subtract %d seconds";
+"timer.adjust.plus.accessibility" = "Add %d seconds";

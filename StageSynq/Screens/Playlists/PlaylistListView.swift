@@ -2,6 +2,7 @@ import SwiftUI
 
 struct PlaylistListView: View {
     @Bindable var viewModel: PlaylistListViewModel
+    @State private var isSettingsPresented = false
 
     var body: some View {
         ZStack {
@@ -35,9 +36,15 @@ struct PlaylistListView: View {
         .navigationTitle("playlist.list.title".localized)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                EditButton()
+                Button {
+                    isSettingsPresented = true
+                } label: {
+                    Image(systemName: "gearshape.fill")
+                }
+                .accessibilityLabel("settings.title".localized)
             }
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItemGroup(placement: .topBarTrailing) {
+                EditButton()
                 Button {
                     viewModel.openCreateDialog()
                 } label: {
@@ -46,6 +53,10 @@ struct PlaylistListView: View {
                         .font(.title3)
                 }
             }
+        }
+        .sheet(isPresented: $isSettingsPresented) {
+            SettingsView()
+                .presentationDetents([.medium, .large])
         }
         .tint(StageSyncStyle.accent)
         .alert("playlist.create.title".localized, isPresented: $viewModel.isCreateDialogPresented) {
