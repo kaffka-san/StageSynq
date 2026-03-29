@@ -60,3 +60,5 @@
 "timer.state.running" = "Running";
 "timer.state.paused" = "Paused";
 "timer.state.finished" = "Finished";
+"timer.adjust.minus5.accessibility" = "Subtract five seconds";
+"timer.adjust.plus5.accessibility" = "Add five seconds";

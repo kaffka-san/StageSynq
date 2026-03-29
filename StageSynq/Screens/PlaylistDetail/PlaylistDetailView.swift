@@ -9,18 +9,19 @@ struct PlaylistDetailView: View {
 
     var body: some View {
         GeometryReader { proxy in
-            let timerHeight = max(140, proxy.size.height * 0.2)
+            let safeBottom = proxy.safeAreaInsets.bottom
+            let timerHeight = max(220, proxy.size.height * 0.28)
+            let timerBottomInset = timerHeight + safeBottom
 
-            ZStack {
+            ZStack(alignment: .bottom) {
                 StageSyncStyle.background.ignoresSafeArea()
 
                 VStack(alignment: .leading, spacing: 16) {
                     songsListSection
                 }
-                .padding()
+                .padding(.horizontal, 16)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            }
-            .safeAreaInset(edge: .bottom) {
+
                 TimerSectionView(
                     viewModel: timerViewModel,
                     songNumber: viewModel.currentTimerSongNumber,
@@ -29,8 +30,9 @@ struct PlaylistDetailView: View {
                     isFinishDisabled: finishButtonDisabled
                 )
                 .frame(height: timerHeight)
+                .frame(maxWidth: .infinity)
             }
-           
+            .ignoresSafeArea(edges: .bottom)
         }
         .navigationTitle(viewModel.playlist?.name ?? "playlist.detail.fallbackTitle".localized)
         .toolbar {
@@ -288,6 +290,14 @@ extension SongEditorViewModel: Identifiable {
 
 #Preview {
     let songs = [
+        Song(name: "Intro", durationMinutes: 1, durationSeconds: 15, order: 0),
+        Song(name: "Intro", durationMinutes: 1, durationSeconds: 15, order: 0),
+        Song(name: "Intro", durationMinutes: 1, durationSeconds: 15, order: 0),
+        Song(name: "Intro", durationMinutes: 1, durationSeconds: 15, order: 0),
+        Song(name: "Intro", durationMinutes: 1, durationSeconds: 15, order: 0),
+        Song(name: "Intro", durationMinutes: 1, durationSeconds: 15, order: 0),
+        Song(name: "Intro", durationMinutes: 1, durationSeconds: 15, order: 0),
+        Song(name: "Intro", durationMinutes: 1, durationSeconds: 15, order: 0),
         Song(name: "Intro", durationMinutes: 1, durationSeconds: 15, order: 0),
         Song(name: "Finale", durationMinutes: 2, durationSeconds: 40, order: 1)
     ]

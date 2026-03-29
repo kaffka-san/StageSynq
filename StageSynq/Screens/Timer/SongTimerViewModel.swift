@@ -122,6 +122,31 @@ extension SongTimerViewModel {
     func appDidBecomeActive() {
         recalculateRemainingTime()
     }
+
+    /// Shifts remaining time by `delta` seconds (positive adds time). No-op when idle, finished, or no song.
+    func adjustRemainingTime(bySeconds delta: Int) {
+        guard selectedSong != nil else { return }
+        switch state {
+        case .idle, .finished:
+            return
+        case .running:
+            guard let endDate else { return }
+            let newRemaining = remainingSeconds + delta
+            if newRemaining <= 0 {
+                finishTimer()
+                return
+            }
+            self.endDate = endDate.addingTimeInterval(TimeInterval(delta))
+            remainingSeconds = newRemaining
+        case .ready, .paused:
+            let newRemaining = remainingSeconds + delta
+            if newRemaining <= 0 {
+                finishTimer()
+                return
+            }
+            remainingSeconds = newRemaining
+        }
+    }
 }
 
 private extension SongTimerViewModel {

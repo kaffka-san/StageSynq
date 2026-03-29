@@ -60,3 +60,5 @@
 "timer.state.running" = "Bezi";
 "timer.state.paused" = "Pozastaveno";
 "timer.state.finished" = "Dokonceno";
+"timer.adjust.minus5.accessibility" = "Odečíst pět sekund";
+"timer.adjust.plus5.accessibility" = "Přidat pět sekund";
